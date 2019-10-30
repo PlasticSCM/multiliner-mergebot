@@ -1,0 +1,228 @@
+﻿[
+  {
+    "name": "server",
+    "displayName": "Server",
+    "type": "plastic_server",
+    "description": "Plastic SCM server."
+  },
+  {
+    "name": "repository",
+    "displayName": "Repository",
+    "type": "string",
+    "description": "The repository that the bot will monitor."
+  },
+  {
+    "name": "branch_prefix",
+    "displayName": "Branch prefix",
+    "type": "string",
+    "description": "The prefix of the branches to be merged. Example: 'task' will take 'task1234'. This is the same prefix that you use to link branches to the issue tracker. Leave this field empty to track all branches in the repository."
+  },
+  {
+    "name": "merge_to_branches_attr_name",
+    "displayName": "Attribute name to specify merge destination branches",
+    "type": "string",
+    "description": "Each processed branch will fetch its value of this attribute to get the merge destination branches. If the attribute value is not set, the branch will be notified as 'failed build'"
+  },
+  {
+    "name": "bot_user",
+    "displayName": "Bot User",
+    "type": "user_api_key",
+    "description": "The API Key of the Plastic SCM user that the mergebot will use to checkin and perform API calls."
+  },
+  {
+    "name": "plastic_group",
+    "displayName": "Branch lifecycle",
+    "type": "group",
+    "description": "Defines when a branch is ready to trigger its build & merge.",
+    "items": [
+      {
+        "name": "status_attribute_group",
+        "displayName": "Branch lifecycle configuration with a status attribute",
+        "type": "group",
+        "description": "Define when a branch is ready to be merged based on a given attribute. Also the values the attribute will take when the bot starts processing the branch.",
+        "items": [
+          {
+            "name": "name",
+            "displayName": "Branch status attribute name",
+            "type": "string",
+            "description": "Branch attribute name that describes the lifecycle status of a branch (e.g. 'status'). It will be automatically created if it doesn't exist yet. This field is mandatory."
+          },
+          {
+            "name": "resolved_value",
+            "displayName": "Resolved status value",
+            "type": "string",
+            "description": "Only branches with this status will be considered by the bot (e.g. 'resolved')."
+          },
+          {
+            "name": "testing_value",
+            "displayName": "Testing status value",
+            "type": "string",
+            "description": "The bot will set this value when it starts processing the branch (e.g. 'testing')."
+          },
+          {
+            "name": "failed_value",
+            "displayName": "Failed status value",
+            "type": "string",
+            "description": "The bot will set this value if the branch is rejected (merge can't happen, tests fail, etc.) (e.g. 'failed'). This value must be different than 'Resolved status value'"
+          },
+          {
+            "name": "merged_value",
+            "displayName": "Merged status value",
+            "type": "string",
+            "description": "The bot will set this status when the branch is correctly processed and merged to the destination branches (e.g. 'merged'). This value must be different than 'Resolved status value'"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "issues_group",
+    "displayName": "Issue Tracker Integration",
+    "type": "group",
+    "description": "All fields are case-sensitive!",
+    "items": [
+      {
+        "name": "plug",
+        "displayName": "Plug",
+        "type": "issuetracker_plug",
+        "description": "The name of the 'issue tracker plug' that the bot uses to get task status. You probably need to configure it first."
+      },
+      {
+        "name": "project_key",
+        "displayName": "Project key",
+        "type": "string",
+        "description": "Key of the project whose issues will be related to the Plastic branches."
+      },
+      {
+        "name": "title_field",
+        "displayName": "Task title field",
+        "type": "string",
+        "description": "The title field of the task in the issue tracker (e.g. 'summary' in Jira)."
+      },
+      {
+        "name": "status_field_group",
+        "displayName": "Task status field",
+        "type": "group",
+        "description": "Task status field name and values.",
+        "items": [
+          {
+            "name": "name",
+            "displayName": "Task status field name",
+            "type": "string",
+            "description": "The status field of the task to allow the branch to be merged (e.g. 'status' in Jira)."
+          },
+          {
+            "name": "resolved_value",
+            "displayName": "Resolved status value",
+            "type": "string",
+            "description": "The status value to query to check if a task is already resolved before trying to merge it (case-sensitive)."
+          },
+          {
+            "name": "testing_value",
+            "displayName": "Testing status value",
+            "type": "string",
+            "description": "The status value to set when a task is being processed (case-sensitive)."
+          },
+          {
+            "name": "failed_value",
+            "displayName": "Failed status value",
+            "type": "string",
+            "description": "The status value to set when a task fails on any stage (case-sensitive)."
+          },
+          {
+            "name": "merged_value",
+            "displayName": "Merged status value",
+            "type": "string",
+            "description": "The status value to set when a task is sucessfully merged (case-sensitive)."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ci_group",
+    "displayName": "CI Integration",
+    "type": "group",
+    "description": "",
+    "items": [
+      {
+        "name": "plug",
+        "displayName": "Plug",
+        "type": "ci_plug",
+        "description": "The name of the 'CI plug' that the bot uses to trigger builds and pass tests."
+      },
+      {
+        "name": "plan",
+        "displayName": "Plan for build & test a branch",
+        "type": "string",
+        "description": "The name of the plan to run to test a task."
+      },
+      {
+        "name": "planAfterCheckin",
+        "displayName": "Plan to run after checking-in a branch",
+        "type": "string",
+        "description": "The name of the plan to run after successful checkin of a branch in specified destination branches (e.g. Use this plan to deploy your code). Leave this field empty if you don't want to run any plan after checkin."
+      }
+    ]
+  },
+  {
+    "name": "notifier_group",
+    "displayName": "Notifications",
+    "type": "group",
+    "description": "Add notifiers in this section so the multiliner bot is able to send relevant messages about processed branches. Notifiers are optional.",
+    "items": [
+      {
+        "name": "notifier1",
+        "displayName": "Notifier 1",
+        "type": "group",
+        "description": "",
+        "items": [
+          {
+            "name": "plug",
+            "displayName": "Plug",
+            "type": "notifier_plug",
+            "description": "The name of the 'notifier plug' to use to send notifications to the team."
+          },
+          {
+            "name": "user_profile_field",
+            "displayName": "User profile field",
+            "type": "profile_field",
+            "description": "The field in the profile to use to identify the correct user to notify. Either this field or the \"Always notify to\" field must be filled-in if you're configuring a notifier plug (but you should probably fill in both of them)."
+          },
+          {
+            "name": "fixed_recipients",
+            "displayName": "Always notify to:",
+            "type": "string",
+            "description": "Comma-separated list of users to notify on every event (plus the branch owner). This list can contain either plastic users (so the actual values will be retrieved from their profiles) or plain usernames in the notification system (e.g. an email address). Either this field or the \"User profile\" field must be filled-in if you're configuring a notifier plug (but you should probably fill in both of them)."
+          }
+        ]
+      },
+      {
+        "name": "notifier2",
+        "displayName": "Notifier 2",
+        "type": "group",
+        "description": "",
+        "items": [
+          {
+            "name": "plug",
+            "displayName": "Plug",
+            "type": "notifier_plug",
+            "description": "The name of the 'notifier plug' to use to send notifications to the team."
+          },
+          {
+            "name": "user_profile_field",
+            "displayName": "User profile field",
+            "type": "profile_field",
+            "description": "The field in the profile to use to identify the correct user to notify. Either this field or the \"Always notify to\" field must be filled-in if you're configuring a notifier plug (but you should probably fill in both of them)."
+          },
+          {
+            "name": "fixed_recipients",
+            "displayName": "Always notify to:",
+            "type": "string",
+            "description": "Comma-separated list of users to notify on every event (plus the branch owner). This list can contain either plastic users (so the actual values will be retrieved from their profiles) or plain usernames in the notification system (e.g. an email address). Either this field or the \"User profile\" field must be filled-in if you're configuring a notifier plug (but you should probably fill in both of them)."
+          }
+        ]
+      }
+    ]
+  }
+]

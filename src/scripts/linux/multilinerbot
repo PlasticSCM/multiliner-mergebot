@@ -1,0 +1,4 @@
+#!/bin/sh
+
+MULTILINERBOT_BIN_DIR=`dirname \`readlink -fn $0\``
+exec "/opt/plasticscm5/server/mono_setup" multilinerbot mono "$MULTILINERBOT_BIN_DIR/multilinerbot.exe" "$@"
